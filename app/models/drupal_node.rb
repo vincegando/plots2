@@ -102,6 +102,10 @@ class DrupalNode < ActiveRecord::Base
     "rails_type"
   end
 
+  def slug_from_path
+  	self.path.split('/').last
+  end
+  
   before_save :set_changed_and_created
   after_create :setup
   before_validation :set_path, on: :create
@@ -317,12 +321,6 @@ class DrupalNode < ActiveRecord::Base
     end
   end
 
-  # base this on a tag!
-  def is_place?
-    # self.has_tag('chapter')
-    self.slug[0..5] == 'place/'
-  end
-
   # ============================================
   # Tag-related methods
 
@@ -497,7 +495,7 @@ class DrupalNode < ActiveRecord::Base
     path
   end
 
-  def self.find_root_by_slug(title)
+  def self.find_by_path(title)
     DrupalNode.where(path: ["/#{title}"]).first
   end
 
